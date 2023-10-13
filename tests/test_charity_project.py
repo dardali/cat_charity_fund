@@ -20,7 +20,9 @@ def test_create_invalid_project_name(superuser_client, invalid_name):
             'full_amount': 5000,
         },
     )
-    assert response.status_code == 422, (
+    assert (
+        response.status_code == 422
+    ), (
         'Создание проектов с пустым названием или с названием длиннее 100 '
         'символов должно быть запрещено.'
     )
@@ -56,7 +58,9 @@ def test_create_project_with_autofilling_fields(superuser_client, json):
         '/charity_project/',
         json=json
     )
-    assert response.status_code == 422, (
+    assert (
+        response.status_code == 422
+    ), (
         'При попытке передать в запросе значения для автозаполняемых полей '
         'должна возвращаться ошибка 422.'
     )
@@ -83,7 +87,9 @@ def test_create_invalid_full_amount_value(superuser_client,
             'full_amount': invalid_full_amount,
         },
     )
-    assert response.status_code == 422, (
+    assert (
+        response.status_code == 422
+    ), (
         'Требуемая сумма (full_amount) проекта должна быть целочисленной и '
         'больше 0.'
     )
@@ -91,11 +97,15 @@ def test_create_invalid_full_amount_value(superuser_client,
 
 def test_get_charity_project(user_client, charity_project):
     response = user_client.get('/charity_project/')
-    assert response.status_code == 200, (
+    assert (
+        response.status_code == 200
+    ), (
         'При GET-запросе к эндпоинту `/charity_project/` должен возвращаться '
         'статус-код 200.'
     )
-    assert isinstance(response.json(), list), (
+    assert isinstance(
+        response.json(), list
+    ), (
         'При GET-запросе к эндпоинту `/charity_project/` должен возвращаться '
         'объект типа `list`.'
     )
@@ -115,7 +125,9 @@ def test_get_charity_project(user_client, charity_project):
             'create_date',
         ]
     )
-    assert sorted(list(data.keys())) == keys, (
+    assert (
+        sorted(list(data.keys())) == keys
+    ), (
         'При GET-запросе к эндпоинту `/charity_project/` в ответе API должны '
         f'быть ключи `{keys}`.'
     )
@@ -139,12 +151,12 @@ def test_get_all_charity_project(
     user_client, charity_project, charity_project_nunchaku
 ):
     response = user_client.get('/charity_project/')
-    assert response.status_code == 200, (
-        'При запросе всех проектов должен возвращаться статус-код 200.'
-    )
-    assert isinstance(response.json(), list), (
-        'При запросе всех проектов должен возвращаться объект типа `list`.'
-    )
+    assert (
+        response.status_code == 200
+    ), 'При запросе всех проектов должен возвращаться статус-код 200.'
+    assert isinstance(
+        response.json(), list
+    ), 'При запросе всех проектов должен возвращаться объект типа `list`.'
     assert len(response.json()) == 2, (
         'При корректном POST-запросе к эндпоинту `/charity_project/` не '
         'создаётся объект в БД. Проверьте модель `CharityProject`.'
@@ -161,9 +173,9 @@ def test_get_all_charity_project(
             'create_date',
         ]
     )
-    assert sorted(list(data.keys())) == keys, (
-        f'При запросе всех проектов в ответе API должны быть ключи `{keys}`.'
-    )
+    assert (
+        sorted(list(data.keys())) == keys
+    ), f'При запросе всех проектов в ответе API должны быть ключи `{keys}`.'
     assert response.json() == [
         {
             'create_date': '2010-10-10T00:00:00',
@@ -258,7 +270,9 @@ def test_create_charity_project_validation_error(json, superuser_client):
         'При некорректном создании проекта должен возвращаться статус-код 422.'
     )
     data = response.json()
-    assert 'detail' in data.keys(), (
+    assert (
+        'detail' in data.keys()
+    ), (
         'При некорректном создании проекта в ответе API должен быть ключ '
         '`detail`.'
     )
@@ -272,12 +286,10 @@ def test_delete_project_usual_user(user_client, charity_project):
 
 
 def test_delete_charity_project(superuser_client, charity_project):
-    response = superuser_client.delete(
-        f'/charity_project/{charity_project.id}'
-    )
-    assert response.status_code == 200, (
-        'При удалении проекта должен возвращаться статус-код 200.'
-    )
+    response = superuser_client.delete(f'/charity_project/{charity_project.id}')
+    assert (
+        response.status_code == 200
+    ), 'При удалении проекта должен возвращаться статус-код 200.'
     data = response.json()
     keys = sorted(
         [
@@ -291,9 +303,9 @@ def test_delete_charity_project(superuser_client, charity_project):
             'close_date',
         ]
     )
-    assert sorted(list(data.keys())) == keys, (
-        f'При удалении проекта в ответе API должны быть ключи `{keys}`.'
-    )
+    assert (
+        sorted(list(data.keys())) == keys
+    ), f'При удалении проекта в ответе API должны быть ключи `{keys}`.'
     assert data == {
         'name': 'chimichangas4life',
         'description': 'Huge fan of chimichangas. Wanna buy a lot',
@@ -308,11 +320,13 @@ def test_delete_charity_project(superuser_client, charity_project):
 
 def test_delete_charity_project_invalid_id(superuser_client):
     response = superuser_client.delete('/charity_project/999a4')
-    assert response.status_code == 422, (
-        'При некорректном удалении проекта должен возвращаться статус-код 422.'
-    )
+    assert (
+        response.status_code == 422
+    ), 'При некорректном удалении проекта должен возвращаться статус-код 422.'
     data = response.json()
-    assert 'detail' in data.keys(), (
+    assert (
+        'detail' in data.keys()
+    ), (
         'При некорректном удалении проекта в ответе API должен быть ключ '
         '`detail`'
     )
@@ -365,9 +379,9 @@ def test_delete_charity_project_invalid_id(superuser_client):
 def test_update_charity_project(superuser_client, charity_project, json,
                                 expected_data):
     response = superuser_client.patch('/charity_project/1', json=json)
-    assert response.status_code == 200, (
-        'При обновлении проекта должен возвращаться статус-код 200.'
-    )
+    assert (
+        response.status_code == 200
+    ), 'При обновлении проекта должен возвращаться статус-код 200.'
     data = response.json()
     keys = sorted(
         [
@@ -381,12 +395,12 @@ def test_update_charity_project(superuser_client, charity_project, json,
             'close_date',
         ]
     )
-    assert sorted(list(data.keys())) == keys, (
-        f'При обновлении проекта в ответе API должны быть ключи `{keys}`.'
-    )
-    assert data == expected_data, (
-        'При обновлении проекта тело ответа API отличается от ожидаемого.'
-    )
+    assert (
+        sorted(list(data.keys())) == keys
+    ), f'При обновлении проекта в ответе API должны быть ключи `{keys}`.'
+    assert (
+        data == expected_data
+    ), 'При обновлении проекта тело ответа API отличается от ожидаемого.'
 
 
 @pytest.mark.parametrize('json', [
@@ -400,7 +414,9 @@ def test_update_charity_project_full_amount_equal_invested_amount(
         '/charity_project/1',
         json=json,
     )
-    assert response.status_code == 200, (
+    assert (
+        response.status_code == 200
+    ), (
         'При редактировании проекта должно быть разрешено устанавливать '
         'требуемую сумму больше или равную внесённой. Должен возвращаться '
         'статус-код 200.'
@@ -418,34 +434,18 @@ def test_update_charity_project_full_amount_equal_invested_amount(
         {'description': ''},
         {'name': ''},
         {'full_amount': ''},
-    ],
-)
-def test_update_charity_project_invalid(superuser_client, charity_project,
-                                        json):
-    response = superuser_client.patch('/charity_project/1', json=json)
-    assert response.status_code == 422, (
-        'При редактировании проекта нельзя назначать пустое имя, описание '
-        'или цель фонда. '
-        'Должен возвращаться статус-код 422.'
-    )
-
-
-@pytest.mark.parametrize(
-    'json',
-    [
         {'invested_amount': 100},
         {'create_date': '2010-10-10'},
         {'close_date': '2010-10-10'},
         {'fully_invested': True},
     ],
 )
-def test_update_charity_with_unexpected_fields(superuser_client,
-                                               charity_project, json):
+def test_update_charity_project_invalid(superuser_client, charity_project,
+                                        json):
     response = superuser_client.patch('/charity_project/1', json=json)
     assert response.status_code == 422, (
-        'Убедитесь, что при редактировании проекта нельзя изменить значение '
-        'полей, редактирование которых не предусмотрено спецификацией к API. '
-        'Должен возвращаться статус-код 422.'
+        'При редактировании проекта нельзя назначать пустое имя, описание или '
+        'цель фонда. Должен возвращаться статус-код 422.'
     )
 
 
@@ -472,17 +472,17 @@ def test_update_charity_project_same_name(superuser_client, charity_project,
     5,
 ])
 def test_update_charity_project_full_amount_smaller_already_invested(
-    superuser_client, charity_project_little_invested, full_amount
+        superuser_client, charity_project_little_invested, full_amount
 ):
     response = superuser_client.patch(
         '/charity_project/1',
         json={
             'name': 'nunchaku',
             'description': 'Huge fan of chimichangas. Wanna buy a lot',
-            'full_amount': full_amount,
+            'invested_amount': full_amount,
         },
     )
-    assert response.status_code in (400, 422), (
+    assert response.status_code == 422, (
         'При редактировании проекта должно быть запрещено устанавливать '
         'требуемую сумму меньше внесённой.'
     )
@@ -497,16 +497,22 @@ def test_create_charity_project_usual_user(user_client):
             'full_amount': 1000000,
         },
     )
-    assert response.status_code == 401, (
+    assert (
+        response.status_code == 401
+    ), (
         'При создании проекта не суперпользователем должен возвращаться '
         'статус-код 401.'
     )
     data = response.json()
-    assert 'detail' in data, (
+    assert (
+        'detail' in data
+    ), (
         'При создании проекта не суперпользователем в ответе API должен быть '
         'ключ `detail`.'
     )
-    assert data == {'detail': 'Unauthorized'}, (
+    assert data == {
+        'detail': 'Unauthorized',
+    }, (
         'При создании проекта не суперпользователем тело ответа API '
         'отличается от ожидаемого.'
     )
@@ -516,23 +522,29 @@ def test_patch_charity_project_usual_user(user_client):
     response = user_client.patch(
         '/charity_project/1', json={'full_amount': 10}
     )
-    assert response.status_code == 401, (
+    assert (
+        response.status_code == 401
+    ), (
         'При обновлении проекта не суперпользователем должен возвращаться '
         'статус-код 401.'
     )
     data = response.json()
-    assert 'detail' in data, (
+    assert (
+        'detail' in data
+    ), (
         'При обновлении проекта не суперпользователем в ответе должен быть '
         'ключ `detail`.'
     )
-    assert data == {'detail': 'Unauthorized'}, (
+    assert data == {
+        'detail': 'Unauthorized',
+    }, (
         'При обновлении проекта не суперпользователем тело ответа API '
         'отличается от ожидаемого.'
     )
 
 
 def test_patch_charity_project_fully_invested(
-    superuser_client, small_fully_charity_project,
+        superuser_client, small_fully_charity_project,
 ):
     response = superuser_client.patch(
         '/charity_project/1', json={'full_amount': 10}
@@ -546,7 +558,7 @@ def test_patch_charity_project_fully_invested(
         'При обновлении проекта, который был полностью проинвестирован, '
         'в ответе должен быть ключ `detail`.'
     )
-    assert data == {'detail': 'Закрытый проект нельзя редактировать!'}, (
+    assert data == {'detail': 'Закрытый проект нельзя редактировать!', }, (
         'При обновлении проекта, который был полностью '
         'проинвестирован, тело ответа API отличается от ожидаемого.'
     )
@@ -562,13 +574,13 @@ def test_create_charity_project_same_name(superuser_client, charity_project):
         },
     )
     assert response.status_code == 400, (
-        'При создании проекта с неуникальным именем должен возвращаться '
-        'статус-код 400.'
+        'При создании проекта с неуникальным именем '
+        'должен возвращаться статус-код 400.'
     )
     data = response.json()
     assert 'detail' in data, (
-        'При создании проекта с неуникальным именем в ответе должен быть '
-        'ключ `detail`.'
+        'При создании проекта с неуникальным именем '
+        'в ответе должен быть ключ `detail`.'
     )
     assert data == {'detail': 'Проект с таким именем уже существует!'}, (
         'При создании проекта с неуникальным именем '
@@ -626,7 +638,8 @@ def test_donation_exist_project_create(superuser_client, donation):
 
 
 def test_delete_charity_project_already_invested(
-        superuser_client, charity_project_little_invested):
+        superuser_client, charity_project_little_invested
+):
     response = superuser_client.delete('/charity_project/1')
     assert response.status_code == 400, (
         'Удаление проектов, в которые уже внесены средства, должно быть '
@@ -640,23 +653,22 @@ def test_delete_charity_project_already_invested(
     )
 
 
-def test_delete_charity_project_already_closed(superuser_client,
+def test_delete_charity_project_already_closed(superuser_client, 
                                                closed_charity_project):
     response = superuser_client.delete('/charity_project/1')
     assert response.status_code == 400, (
-        'Удаление закрытых проектов должно быть запрещено. Статус-код ответа '
-        'отличается от ожидаемого.'
+        'Удаление закрытых проектов должно быть запрещено. '
+        'Статус-код ответа отличается от ожидаемого.'
     )
     assert response.json()['detail'] == (
         'В проект были внесены средства, не подлежит удалению!'
     ), (
-        'Удаление закрытых проектов должно быть запрещено. Тело ответа '
-        'отличается от ожидаемого.'
+        'Удаление закрытых проектов должно быть запрещено. '
+        'Тело ответа отличается от ожидаемого.'
     )
 
 
-def test_get_all_charity_project_not_auth_user(test_client,
-                                               charity_project,
+def test_get_all_charity_project_not_auth_user(test_client, charity_project,
                                                charity_project_nunchaku):
     response = test_client.get('/charity_project/')
     assert response.status_code == 200, (

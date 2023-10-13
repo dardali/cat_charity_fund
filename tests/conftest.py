@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 try:
-    from app.main import app  # noqa
+    from app.main import app
 except (NameError, ImportError):
     raise AssertionError(
         'Не обнаружен объект приложения `app`.'
@@ -16,7 +16,7 @@ except (NameError, ImportError):
     )
 
 try:
-    from app.core.db import Base, get_async_session  # noqa
+    from app.core.db import Base, get_async_session
 except (NameError, ImportError):
     raise AssertionError(
         'Не обнаружены объекты `Base, get_async_session`. '
@@ -25,7 +25,7 @@ except (NameError, ImportError):
     )
 
 try:
-    from app.core.user import current_superuser, current_user  # noqa
+    from app.core.user import current_superuser, current_user
 except (NameError, ImportError):
     raise AssertionError(
         'Не обнаружены объекты `current_superuser, current_user`.'
@@ -34,7 +34,7 @@ except (NameError, ImportError):
     )
 
 try:
-    from app.schemas.user import UserCreate  # noqa
+    from app.schemas.user import UserCreate
 except (NameError, ImportError):
     raise AssertionError(
         'Не обнаружена схема создания пользователя UserCreate. '

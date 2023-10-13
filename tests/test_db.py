@@ -40,8 +40,9 @@ def test_check_migration_file_exist():
     )
     VERSIONS_DIR = ALEMBIC_DIR / 'versions'
     files_in_version_dir = [
-        f.name for f in VERSIONS_DIR.iterdir()
-        if f.is_file() and 'init' not in f.name
+        f.name for f in VERSIONS_DIR.iterdir() if (
+            f.is_file() and 'init' not in f.name
+        )
     ]
     assert len(files_in_version_dir) > 0, (
         'В папке `alembic.versions` не обнаружены файлы миграций'

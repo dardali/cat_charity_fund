@@ -108,8 +108,8 @@ def test_get_all_donations(superuser_client, donation, another_donation):
         'fully_invested',
     ])
     assert sorted(list(data.keys())) == keys, (
-        'При получении списка всех пожертвований в ответе должны быть ключи '
-        f'`{keys}`.'
+        'При получении списка всех пожертвований в ответе должны быть '
+        f'ключи `{keys}`.'
     )
     data = response.json()
     assert data == [
