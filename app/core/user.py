@@ -1,4 +1,5 @@
 from typing import Optional, Union
+import logging
 
 from fastapi import Depends, Request
 from fastapi_users import (
@@ -22,6 +23,8 @@ async def get_user_db(session: AsyncSession = Depends(get_async_session)):
 
 
 bearer_transport = BearerTransport(tokenUrl='auth/jwt/login')
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 def get_jwt_strategy() -> JWTStrategy:
@@ -55,8 +58,8 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     async def on_after_register(
             self, user: User, request: Optional[Request] = None
     ):
-        pass
-        print(f'Пользователь {user.email} зарегистрирован.')
+
+        logger.info(f'Пользователь {user.email} зарегистрирован.')
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):

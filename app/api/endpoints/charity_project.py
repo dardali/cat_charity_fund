@@ -61,7 +61,7 @@ async def partially_update_meeting_room(
         session: AsyncSession = Depends(get_async_session),
 ):
     project = await check_exists(project_id, session)
-    project = await check_the_opportunity_to_update_project(project, obj_in)
+    project = check_the_opportunity_to_update_project(project, obj_in)
     await check_the_unique_project_name_update(
         obj_in.name, project_id, session)
     return await charity_project_crud.update_project(
@@ -79,5 +79,5 @@ async def remove_project(
         session: AsyncSession = Depends(get_async_session),
 ):
     project_obj = await check_exists(project_id, session)
-    await check_the_opportunity_to_delete(project_obj)
+    check_the_opportunity_to_delete(project_obj)
     return await charity_project_crud.remove(project_obj, session)

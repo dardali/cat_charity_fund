@@ -21,7 +21,7 @@ async def check_exists(
     return model_object
 
 
-async def check_the_opportunity_to_delete(
+def check_the_opportunity_to_delete(
         project: CharityProject,
 ):
     if project.invested_amount > 0:
@@ -31,7 +31,7 @@ async def check_the_opportunity_to_delete(
         )
 
 
-async def check_the_opportunity_to_update_project(
+def check_the_opportunity_to_update_project(
         project: CharityProject,
         update_data: CharityProjectUpdate,
 ) -> CharityProject:

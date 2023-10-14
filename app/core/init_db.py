@@ -1,4 +1,5 @@
 import contextlib
+import logging
 
 from fastapi_users.exceptions import UserAlreadyExists
 from pydantic import EmailStr
@@ -11,6 +12,9 @@ from app.schemas.user import UserCreate
 get_async_session_context = contextlib.asynccontextmanager(get_async_session)
 get_user_db_context = contextlib.asynccontextmanager(get_user_db)
 get_user_manager_context = contextlib.asynccontextmanager(get_user_manager)
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 async def create_user(
@@ -28,7 +32,7 @@ async def create_user(
                         )
                     )
     except UserAlreadyExists:
-        pass
+        logger.info(f"User with email {email} already exists.")
 
 
 async def create_first_superuser():
